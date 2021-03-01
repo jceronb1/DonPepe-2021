@@ -17,7 +17,8 @@
         android:layout_marginLeft="36dp"
         android:layout_marginEnd="35dp"
         android:layout_marginRight="35dp"
-        app:srcCompat="@drawable/imagen1" />
+        app:srcCompat="@drawable/imagen1"
+        android:contentDescription="TODO" />
 
     <TableLayout
         android:layout_width="match_parent"
