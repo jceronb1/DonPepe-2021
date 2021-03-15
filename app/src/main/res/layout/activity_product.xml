@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProductActivity">
+
+    <TextView
+        android:id="@+id/donpepelogo"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="25dp"
+        android:text="Don pepe"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/searchField"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/productNameText"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="50dp"
+        android:text="Nombre producto"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/donpepelogo" />
+
+    <ImageView
+        android:id="@+id/productImage"
+        android:layout_width="410dp"
+        android:layout_height="150dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productNameText"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <TextView
+        android:id="@+id/categoryNameLabel"
+        android:layout_width="130dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:text="Categoria"
+        app:layout_constraintEnd_toStartOf="@+id/categoryNameText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productImage" />
+
+    <TextView
+        android:id="@+id/categoryNameText"
+        android:layout_width="250dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/categoryNameLabel"
+        app:layout_constraintTop_toBottomOf="@+id/productImage" />
+
+    <TextView
+        android:id="@+id/priceLabel"
+        android:layout_width="130dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:text="Precio"
+        app:layout_constraintEnd_toStartOf="@+id/priceText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryNameLabel" />
+
+    <TextView
+        android:id="@+id/priceText"
+        android:layout_width="250dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/priceLabel"
+        app:layout_constraintTop_toBottomOf="@+id/categoryNameText" />
+
+    <TextView
+        android:id="@+id/descriptionLabel"
+        android:layout_width="130dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:text="Description"
+        app:layout_constraintEnd_toStartOf="@+id/descriptionText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/priceLabel" />
+
+    <TextView
+        android:id="@+id/descriptionText"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="10dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/descriptionLabel"
+        app:layout_constraintTop_toBottomOf="@+id/priceText" />
+
+
+    <TextView
+        android:id="@+id/sellerNameLabel"
+        android:layout_width="130dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Vendedor"
+        app:layout_constraintEnd_toStartOf="@+id/sellerNameText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionText" />
+
+    <TextView
+        android:id="@+id/sellerNameText"
+        android:layout_width="250dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/sellerNameLabel"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionText" />
+
+    <TextView
+        android:id="@+id/sellerAddrLabel"
+        android:layout_width="130dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:text="Direcion el vendedor"
+        app:layout_constraintEnd_toStartOf="@+id/sellerAddrText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sellerNameText" />
+
+    <TextView
+        android:id="@+id/sellerAddrText"
+        android:layout_width="250dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/sellerAddrLabel"
+        app:layout_constraintTop_toBottomOf="@+id/sellerNameText" />
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="50dp"
+        android:text="Volver"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buyButton" />
+
+    <Button
+        android:id="@+id/buyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="50dp"
+        android:text="comprar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

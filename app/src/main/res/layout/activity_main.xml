@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ListView
+        android:id="@+id/homeList"
+        android:layout_width="315dp"
+        android:layout_height="576dp"
+        android:layout_marginEnd="100dp"
+        android:paddingBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/homeBanner"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/homeBanner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        app:layout_constraintBottom_toTopOf="@+id/homeList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <ImageButton
+        android:id="@+id/homeButton"
+        android:layout_width="96dp"
+        android:layout_height="60dp"
+        android:src="@drawable/baseline_home_black_18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/homeList"
+        app:layout_constraintTop_toBottomOf="@+id/homeBanner" />
+
+    <ImageButton
+        android:id="@+id/techCategory"
+        android:layout_width="96dp"
+        android:layout_height="60dp"
+        android:src="@drawable/baseline_phone_android_black_18dp"
+        app:layout_constraintBottom_toTopOf="@+id/petsCategory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/homeList"
+        app:layout_constraintTop_toBottomOf="@+id/homeButton" />
+
+    <ImageButton
+        android:id="@+id/petsCategory"
+        android:layout_width="96dp"
+        android:layout_height="60dp"
+        android:src="@drawable/baseline_pets_black_18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/homeList"
+        app:layout_constraintTop_toBottomOf="@+id/techCategory" />
+
+    <ImageButton
+        android:id="@+id/vehiclesCategory"
+        android:layout_width="96dp"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/homeList"
+        app:layout_constraintTop_toBottomOf="@+id/petsCategory"
+        app:srcCompat="@drawable/baseline_directions_car_black_18dp" />
+
+    <EditText
+        android:id="@+id/searchField"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/donpepelogo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/donpepelogo"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="25dp"
+        android:text="Don pepe"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:textSize="25sp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

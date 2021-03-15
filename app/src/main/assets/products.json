@@ -1,0 +1,70 @@
+{
+  "products": [
+    {
+      "name": "Product 1",
+      "price": 1000,
+      "description": "Este es el producto 1.",
+      "image": "@drawable/ic_launcher_foreground",
+      "category": "Tech",
+      "seller": {
+        "name": "seller 1",
+        "address": "Direcion seller 1"
+      }
+    },
+    {
+      "name": "Product 2",
+      "price": 1000,
+      "description": "Este es el producto 2.",
+      "image": "@drawable/ic_launcher_foreground",
+      "category": "Tech",
+      "seller": {
+        "name": "seller 2",
+        "address": "Direcion seller 2"
+      }
+    },
+    {
+      "name": "Product 3",
+      "price": 1000,
+      "description": "Este es el producto 3.",
+      "image": "@drawable/ic_launcher_foreground",
+      "category": "Pets",
+      "seller": {
+        "name": "seller 3",
+        "address": "Direcion seller 3"
+      }
+    },
+    {
+      "name": "Product 4",
+      "price": 1000,
+      "description": "Este es el producto 4.",
+      "image": "@drawable/ic_launcher_foreground",
+      "category": "Pets",
+      "seller": {
+        "name": "seller 4",
+        "address": "Direcion seller 4"
+      }
+    },
+    {
+      "name": "Product 5",
+      "price": 1000,
+      "description": "Este es el producto 5.",
+      "image": "@drawable/ic_launcher_foreground",
+      "category": "Vehicles",
+      "seller": {
+        "name": "seller 5",
+        "address": "Direcion seller 5"
+      }
+    },
+    {
+      "name": "Product 6",
+      "price": 1000,
+      "description": "Este es el producto 6.",
+      "image": "@drawable/ic_launcher_foreground",
+      "category": "Vehicles",
+      "seller": {
+        "name": "seller 6",
+        "address": "Direcion seller 6"
+      }
+    }
+]
+}
