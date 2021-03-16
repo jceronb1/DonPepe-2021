@@ -32,8 +32,52 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ImageButton burger = (ImageButton) findViewById(R.id.burger);
+        ImageButton cart = (ImageButton) findViewById(R.id.cartButton);
+        Button singin = (Button) findViewById(R.id.signInMainButton);
+        ImageButton signout = (ImageButton) findViewById(R.id.signOut);
         if(getIntent().hasExtra("loggedIn")){
+            singin.setVisibility(View.INVISIBLE);
+            burger.setVisibility(View.VISIBLE);
+            signout.setVisibility(View.VISIBLE);
+            burger.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), SellSelectActivity.class);
+                    intent.putExtra("loggedIn", "true");
+                    startActivity(intent);
+                }
+            });
+            cart.setVisibility(View.VISIBLE);
+            cart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+                    intent.putExtra("loggedIn", "true");
+                    startActivity(intent);
+                }
+            });
+            signout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.removeExtra("loggedIn");
+                    startActivity(intent);
+                }
+            });
             loggedIn = true ;
+        }else{
+            burger.setVisibility(View.INVISIBLE);
+            cart.setVisibility(View.INVISIBLE);
+            singin.setVisibility(View.VISIBLE);
+            signout.setVisibility(View.INVISIBLE);
+            singin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
 
         this.strArreglo = new ArrayList<String>();
@@ -178,7 +222,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        System.out.println(">JLJSDLKJASKLDJASLKASDLJ");
         if(getIntent().hasExtra("loggedIn")){
 
             return ;

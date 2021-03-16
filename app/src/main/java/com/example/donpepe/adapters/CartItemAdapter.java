@@ -2,33 +2,29 @@ package com.example.donpepe.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.donpepe.MainActivity;
 import com.example.donpepe.R;
 import com.example.donpepe.models.Product;
 
-import java.lang.reflect.Array;
-import java.net.URI;
 import java.util.ArrayList;
 
-public class ProductItemAdapter extends BaseAdapter {
+public class CartItemAdapter extends BaseAdapter {
 
     ArrayList<Product> products;
-        LayoutInflater iflter;
+    LayoutInflater iflter;
 
-    public ProductItemAdapter(Context appContext, ArrayList<Product> products ){
+    public CartItemAdapter(Context appContext, ArrayList<Product> products){
         this.products = products;
         this.iflter = (LayoutInflater.from(appContext));
     }
-
     @Override
     public int getCount() {
         return this.products.size();
@@ -50,25 +46,27 @@ public class ProductItemAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        view = this.iflter.inflate(R.layout.activity_product_item, null);
-        TextView itemName = (TextView) view.findViewById(R.id.itemName);
-        ImageView itemImage = (ImageView) view.findViewById(R.id.itemImage);
+        view = this.iflter.inflate(R.layout.activity_cart_item, null);
+        TextView itemName = (TextView) view.findViewById(R.id.cartItemName);
+        ImageView itemImage = (ImageView) view.findViewById(R.id.cartItemImage);
+        TextView itemPrice = (TextView) view.findViewById(R.id.cartItemPrice);
+        Button deleteButton = (Button) view.findViewById(R.id.deleteButton);
         Drawable drawable;
-        if(position < this.products.size()){
+
             itemName.setText(this.products.get(position).name);
-             drawable = view.getResources().getDrawable(view.getResources().getIdentifier(
+            itemPrice.setText(String.valueOf(this.products.get(position).price));
+            drawable = view.getResources().getDrawable(view.getResources().getIdentifier(
                     this.products.get(position).image,
                     "drawable",
                     "com.example.donpepe"
             ));
-        }else{
-            itemName.setText(this.products.get(this.products.size()-1).name);
-             drawable = view.getResources().getDrawable(view.getResources().getIdentifier(
-                    this.products.get(this.products.size()-1).image,
-                    "drawable",
-                    "com.example.donpepe"
-            ));
-        }
+        View finalView = view;
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(finalView.getContext(), "The item is removed...", Toast.LENGTH_SHORT);
+                }
+            });
         itemImage.setImageDrawable(drawable);
         return view;
     }

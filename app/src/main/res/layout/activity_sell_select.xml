@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SellSelectActivity">
+
+    <TextView
+        android:id="@+id/donpepelogo"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="25dp"
+        android:text="Don pepe"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/searchField"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:textSize="25sp" />
+
+    <ImageView
+        android:id="@+id/userImage"
+        android:layout_width="154dp"
+        android:layout_height="153dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/donpepelogo"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <ImageButton
+        android:id="@+id/selectTechCategory"
+        android:layout_width="96dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="80dp"
+        android:src="@drawable/baseline_phone_android_black_18dp"
+        app:layout_constraintEnd_toStartOf="@+id/selectVehiclesCategory"
+        app:layout_constraintTop_toBottomOf="@+id/selectHomeButton" />
+
+    <ImageButton
+        android:id="@+id/selectHomeButton"
+        android:layout_width="96dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="80dp"
+        android:src="@drawable/baseline_home_black_18dp"
+        app:layout_constraintEnd_toStartOf="@+id/selectPetsCategory"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <ImageButton
+        android:id="@+id/selectPetsCategory"
+        android:layout_width="96dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="65dp"
+        android:src="@drawable/baseline_pets_black_18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <ImageButton
+        android:id="@+id/selectVehiclesCategory"
+        android:layout_width="96dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="65dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectPetsCategory"
+        app:srcCompat="@drawable/baseline_directions_car_black_18dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginBottom="35dp"
+        android:text="Selecione la categora del producto"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/selectHomeButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userImage" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DonPepe">
-        <activity android:name=".ProductItemActivity"></activity>
+        <activity android:name=".CartItemActivity"></activity>
+        <activity android:name=".CartActivity" />
+        <activity android:name=".SellSelectActivity" />
+        <activity android:name=".SellActivity" />
+        <activity android:name=".ProductItemActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".ProductActivity" />

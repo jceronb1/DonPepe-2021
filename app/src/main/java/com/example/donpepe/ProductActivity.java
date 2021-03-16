@@ -46,6 +46,13 @@ public class ProductActivity extends AppCompatActivity {
         if(getIntent().hasExtra("loggedIn")){
             loggedIn = true;
             buyButton.setText("Comprar");
+            buyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+                    startActivity(intent);
+                }
+            });
         }else{
             buyButton.setText("Sign up");
             buyButton.setOnClickListener(new View.OnClickListener() {
