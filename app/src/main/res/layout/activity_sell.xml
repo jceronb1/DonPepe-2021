@@ -22,47 +22,54 @@
         android:id="@+id/newProductImage"
         android:layout_width="410dp"
         android:layout_height="150dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/donpepelogo"
         app:srcCompat="@drawable/ic_launcher_background" />
 
+
     <TextView
         android:id="@+id/nameLabel"
         android:layout_width="130dp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         android:text="Nombre"
         app:layout_constraintEnd_toStartOf="@+id/newNameText"
-        app:layout_constraintHorizontal_bias="0.222"
+        app:layout_constraintHorizontal_bias="0.142"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newProductImage" />
+        app:layout_constraintTop_toBottomOf="@+id/uploadProductImage" />
 
     <EditText
         android:id="@+id/newNameText"
         android:layout_width="250dp"
-        android:layout_height="20dp"
+        android:layout_height="50dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.222"
         app:layout_constraintStart_toEndOf="@+id/priceLabel"
-        app:layout_constraintTop_toBottomOf="@+id/newProductImage" />
+        app:layout_constraintTop_toBottomOf="@+id/uploadProductImage" />
 
     <TextView
         android:id="@+id/priceLabel"
         android:layout_width="130dp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
         android:text="Precio"
         app:layout_constraintEnd_toStartOf="@+id/newPriceText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newNameText" />
+        app:layout_constraintTop_toBottomOf="@+id/nameLabel" />
 
     <EditText
         android:id="@+id/newPriceText"
-        android:layout_width="250dp"
-        android:layout_height="20dp"
+        android:layout_width="256dp"
+        android:layout_height="50dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/priceLabel"
         app:layout_constraintTop_toBottomOf="@+id/newNameText" />
@@ -72,6 +79,7 @@
         android:layout_width="130dp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
         android:text="Description"
         app:layout_constraintEnd_toStartOf="@+id/newDescriptionText"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,32 +87,32 @@
 
     <EditText
         android:id="@+id/newDescriptionText"
-        android:layout_width="250dp"
+        android:layout_width="256dp"
         android:layout_height="100dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/descriptionLabel"
         app:layout_constraintTop_toBottomOf="@+id/newPriceText" />
-
-
-    <Button
-        android:id="@+id/uploadProductImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="260dp"
-        android:text="cargar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/createProduct" />
 
     <Button
         android:id="@+id/createProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="92dp"
-        android:layout_marginBottom="260dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="160dp"
         android:text="crear"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newDescriptionText" />
+
+    <Button
+        android:id="@+id/uploadProductImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="137dp"
+        android:text="cargar foto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newProductImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
