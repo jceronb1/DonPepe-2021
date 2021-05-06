@@ -28,7 +28,7 @@ import com.example.donpepe.models.Seller;;
 public class ProductActivity extends AppCompatActivity {
 
 
-   
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

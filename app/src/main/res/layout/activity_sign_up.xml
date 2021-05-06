@@ -46,6 +46,7 @@
         android:layout_marginStart="10dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:password="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/passwordLabel"
         app:layout_constraintTop_toBottomOf="@+id/emailText" />
@@ -83,17 +84,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordLabel" />
 
-    <EditText
-        android:id="@+id/addrText"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/addrLabel"
-        app:layout_constraintTop_toBottomOf="@+id/phoneText" />
-
     <TextView
         android:id="@+id/addrLabel"
         android:layout_width="150dp"
@@ -101,16 +91,16 @@
         android:layout_marginStart="25dp"
         android:text="address"
         android:textSize="25sp"
-        app:layout_constraintEnd_toStartOf="@+id/addrText"
+        app:layout_constraintEnd_toStartOf="@+id/searchAddrButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phoneLabel" />
 
     <Button
         android:id="@+id/signUpActionButton"
         android:layout_width="100dp"
-        android:layout_height="52dp"
+        android:layout_height="50dp"
         android:layout_marginTop="168dp"
-        android:layout_marginEnd="104dp"
+        android:layout_marginEnd="84dp"
         android:text="sign up"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordText" />
@@ -128,11 +118,30 @@
     <Button
         android:id="@+id/fromUpToLogin"
         android:layout_width="100dp"
-        android:layout_height="52dp"
+        android:layout_height="50dp"
         android:layout_marginTop="68dp"
-        android:layout_marginEnd="26dp"
+        android:layout_marginEnd="244dp"
+        android:background="#2492EA"
         android:text="LOGIN"
-        app:layout_constraintEnd_toStartOf="@+id/signUpActionButton"
-        app:layout_constraintTop_toBottomOf="@+id/addrLabel" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchAddrButton" />
+
+    <Button
+        android:id="@+id/searchAddrButton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:text="search addr"
+        app:layout_constraintStart_toEndOf="@+id/addrLabel"
+        app:layout_constraintTop_toBottomOf="@+id/phoneText" />
+
+    <TextView
+        android:id="@+id/addressText"
+        android:layout_width="210dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchAddrButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

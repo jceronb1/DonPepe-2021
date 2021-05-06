@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.donpepe">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DonPepe">
-        <activity android:name=".CartItemActivity"></activity>
+        <activity android:name=".MapsActivity"></activity>
+        <activity android:name=".CartItemActivity" />
         <activity android:name=".CartActivity" />
         <activity android:name=".SellSelectActivity" />
         <activity android:name=".SellActivity" />
@@ -25,6 +28,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
     </application>
+
+
 
 </manifest>

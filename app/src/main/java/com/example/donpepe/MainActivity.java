@@ -14,6 +14,8 @@ import android.widget.ListView;
 import com.example.donpepe.adapters.ProductItemAdapter;
 import com.example.donpepe.models.Product;
 import com.example.donpepe.models.Seller;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,18 +27,24 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser;
     ArrayList<String> strArreglo;
     ArrayList<Product> arreglo;
-    boolean loggedIn = false;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected void onStart() {
+        super.onStart();
+        currentUser = mAuth.getCurrentUser();
+        updateUi();
+    }
+
+    private void updateUi(){
         ImageButton burger = (ImageButton) findViewById(R.id.burger);
         ImageButton cart = (ImageButton) findViewById(R.id.cartButton);
         Button singin = (Button) findViewById(R.id.signInMainButton);
         ImageButton signout = (ImageButton) findViewById(R.id.signOut);
-        if(getIntent().hasExtra("loggedIn")){
+        if(currentUser != null){
             singin.setVisibility(View.INVISIBLE);
             burger.setVisibility(View.VISIBLE);
             signout.setVisibility(View.VISIBLE);
@@ -60,12 +68,11 @@ public class MainActivity extends AppCompatActivity {
             signout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.removeExtra("loggedIn");
-                    startActivity(intent);
+                    mAuth.signOut();
+                    currentUser = null;
+                    updateUi();
                 }
             });
-            loggedIn = true ;
         }else{
             burger.setVisibility(View.INVISIBLE);
             cart.setVisibility(View.INVISIBLE);
@@ -79,7 +86,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         this.strArreglo = new ArrayList<String>();
         this.arreglo = new ArrayList<Product>();
         initProducts();
@@ -114,9 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("category", jsonObject.getString("category"));
                     intent.putExtra("seller_name", seller.name);
                     intent.putExtra("seller_address", seller.address);
-                    System.out.println(loggedIn);
-                    System.out.println(getIntent().getStringExtra("loggedIn"));
-                    if(loggedIn){
+                    if(currentUser != null){
                         intent.putExtra("loggedIn", "true");
                     }
                     startActivity(intent);
@@ -132,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
                 intent.putExtra("category", "home");
-                if(loggedIn){
+                if(currentUser != null){
                     intent.putExtra("loggedIn", "true");
                 }
                 startActivity(intent);
@@ -144,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
                 intent.putExtra("category", "Tech");
-                if(loggedIn){
+                if(currentUser != null){
                     intent.putExtra("loggedIn", "true");
                 }
                 startActivity(intent);
@@ -156,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
                 intent.putExtra("category", "Pets");
-                if(loggedIn){
+                if(currentUser != null){
                     intent.putExtra("loggedIn", "true");
                 }
                 startActivity(intent);
@@ -168,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
                 intent.putExtra("category", "Vehicles");
-                if(loggedIn){
+                if(currentUser != null){
                     intent.putExtra("loggedIn", "true");
                 }
                 startActivity(intent);

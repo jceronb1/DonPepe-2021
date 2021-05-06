@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "71353087055",
+    "project_id": "donpepe-4e523",
+    "storage_bucket": "donpepe-4e523.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71353087055:android:3eaaa8f17d42b0757ce63a",
+        "android_client_info": {
+          "package_name": "com.example.donpepe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "71353087055-7pgkpktqs20tbblbpvnfva19uji18d82.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJMM5EwRuNWydPVaSMxC_1LgEpiK34cnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71353087055-7pgkpktqs20tbblbpvnfva19uji18d82.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
