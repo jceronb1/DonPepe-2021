@@ -20,24 +20,24 @@
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginTop="15dp"
         android:text="email"
         android:textSize="25sp"
         app:layout_constraintEnd_toStartOf="@+id/emailText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userimg" />
+        app:layout_constraintTop_toBottomOf="@+id/signUpFilesButton" />
 
     <EditText
         android:id="@+id/emailText"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginTop="15dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/emailLabel"
-        app:layout_constraintTop_toBottomOf="@+id/userimg" />
+        app:layout_constraintTop_toBottomOf="@+id/signUpCamButton" />
 
     <EditText
         android:id="@+id/passwordText"
@@ -99,19 +99,19 @@
         android:id="@+id/signUpActionButton"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:layout_marginTop="168dp"
-        android:layout_marginEnd="84dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
         android:text="sign up"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordText" />
+        app:layout_constraintTop_toBottomOf="@+id/addressText" />
 
     <Button
-        android:id="@+id/userImgButton"
-        android:layout_width="200dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="104dp"
-        android:text="subir foto"
+        android:id="@+id/signUpCamButton"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="50dp"
+        android:text="Camara"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userimg" />
 
@@ -119,12 +119,11 @@
         android:id="@+id/fromUpToLogin"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginEnd="244dp"
-        android:background="#2492EA"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
         android:text="LOGIN"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchAddrButton" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addressText" />
 
     <Button
         android:id="@+id/searchAddrButton"
@@ -143,5 +142,15 @@
         android:layout_marginEnd="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchAddrButton" />
+
+    <Button
+        android:id="@+id/signUpFilesButton"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="5dp"
+        android:text="Galeria"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userimg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
