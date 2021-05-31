@@ -8,19 +8,18 @@
 
     <ImageView
         android:id="@+id/itemImage"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        app:layout_constraintEnd_toStartOf="@+id/itemName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toBottomOf="@+id/itemName"
+        app:srcCompat="@drawable/ic_launcher_foreground"
+        tools:layout_editor_absoluteX="1dp" />
 
     <TextView
         android:id="@+id/itemName"
-        android:layout_width="270dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/itemImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

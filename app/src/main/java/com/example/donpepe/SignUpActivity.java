@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,26 +20,44 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.donpepe.controllers.UsersController;
 import com.example.donpepe.helpers.AskPermission;
+import com.example.donpepe.models.Seller;
+import com.example.donpepe.models.Session;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();;
+    private FirebaseStorage mStorage = FirebaseStorage.getInstance();
 
     private String address ;
     private Double lat;
     private Double lon;
+    private Bitmap mBitmap;
+    private String imageUrl;
     public static final int IMAGE_PICKER_REQUEST = 1;
     public static final int REQUEST_IMAGE_CAPTURE = 2;
     public static final int ADDRESS_FOUND = 49935;
@@ -56,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
             this.lon = data.getDoubleExtra("lat", 99);
             TextView text = (TextView) findViewById(R.id.addressText);
             text.setText(this.address + " " + this.lat + "," + this.lon);
-            Toast.makeText(getApplicationContext(), "Address is set to " + this.address + " " + this.lat + " " + this.lon, Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), "Address is set to " + this.address + " " + this.lat + " " + this.lon, Toast.LENGTH_LONG).show();
         }
         if(requestCode == IMAGE_PICKER_REQUEST && resultCode == RESULT_OK){
             ImageView image = (ImageView) findViewById(R.id.userimg);
@@ -64,7 +83,8 @@ public class SignUpActivity extends AppCompatActivity {
                 final Uri imageUri = data.getData();
                 final InputStream inputStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(inputStream);
-                    image.setImageBitmap(selectedImage);
+                mBitmap = selectedImage;
+                image.setImageBitmap(selectedImage);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -73,6 +93,7 @@ public class SignUpActivity extends AppCompatActivity {
             ImageView image = (ImageView) findViewById(R.id.userimg);
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mBitmap = imageBitmap;
             image.setImageBitmap(imageBitmap);
         }
     }
@@ -114,11 +135,13 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText emailText = (EditText) findViewById(R.id.emailText);
                 EditText passwordText = (EditText) findViewById(R.id.passwordText);
+                EditText passwordConfirmationText = (EditText) findViewById(R.id.passwordConfirmationText);
                 EditText phoneText = (EditText) findViewById(R.id.phoneText);
                 String email = emailText.getText().toString();
                 String password = passwordText.getText().toString();
+                String passwordConfirmation = passwordConfirmationText.getText().toString();
                 String phone = phoneText.getText().toString();
-                createAccount(email, password, phone);
+                createAccount(email, password, passwordConfirmation, phone);
             }
         });
 
@@ -139,7 +162,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void createAccount(String email, String password, String phone) {
+    private void createAccount(String email, String password, String passwordConfirmation, String phone) {
         if(email.isEmpty()){
             EditText emailText = (EditText) findViewById(R.id.emailText);
             emailText.setError("email is required");
@@ -148,6 +171,11 @@ public class SignUpActivity extends AppCompatActivity {
         if(password.isEmpty()){
             EditText passwordText = (EditText) findViewById(R.id.passwordText);
             passwordText.setError("password is required. wtf are you doing");
+            return;
+        }
+        if(passwordConfirmation.isEmpty()){
+            EditText passwordConfirmationText = (EditText) findViewById(R.id.passwordConfirmationText);
+            passwordConfirmationText.setError("password confirmation is required. wtf are you doing");
             return;
         }
         if(phone.isEmpty()){
@@ -161,19 +189,78 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        if(mBitmap == null){
+            Toast.makeText(getApplicationContext(), "Please select a profile image ", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    //FirebaseUser user = mAuth.getCurrentUser();
-                    // first save user to the database, then update profile url
-                /*
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setPhotoUri();
-                 */
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
+
+                    FirebaseUser currentUser = mAuth.getCurrentUser();
+
+                    StorageReference myStorageRef = mStorage.getReference().child(currentUser.getUid());
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    mBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                    UploadTask uploadTask = myStorageRef.putBytes(baos.toByteArray());
+                    uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if(task.isSuccessful()){
+                                myStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        imageUrl = uri.toString();
+                                        Seller newSeller = new Seller(
+                                                currentUser.getUid(),
+                                                email,
+                                                password,
+                                                passwordConfirmation,
+                                                phone,
+                                                address,
+                                                lat,
+                                                lon,
+                                                imageUrl
+                                        );
+                                        Call<ResponseBody> signUpCall =  UsersController.signUp(newSeller);
+                                        signUpCall.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                System.out.println("Signed up SUCCESS");
+                                                System.out.println(response.body());
+                                                Gson gson = new Gson();
+                                                try {
+                                                    Session newSession = gson.fromJson(response.body().string(), Session.class);
+                                                    SharedPreferences sp = getSharedPreferences("myPrefs", MODE_PRIVATE);
+                                                    SharedPreferences.Editor spe = sp.edit();
+                                                    spe.putString("token", newSession.getToken());
+                                                    spe.commit();
+                                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                                    startActivity(intent);
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable throwable) {
+                                                System.out.println("Signed up FAILED");
+                                                throwable.printStackTrace();
+                                                Toast.makeText(getApplicationContext(), "Sign up failed. Try again", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }
+                                });
+                            }else{
+                                System.out.println("Image upload failed");
+                                Toast.makeText(getApplicationContext(), "Failed to upload photo, please try again", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
                 }else{
-                    Toast.makeText(getApplicationContext(), "Sign up failed. Try again", Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(), "Sign up failed. Try again", Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PurchaseItemActivity">
+
+    <ImageView
+        android:id="@+id/piSellerPurchaseImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/piSellerEmailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seller Email"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/piSellerPurchaseImg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/piSellerPhoneText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seller Phone"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/piSellerPurchaseImg"
+        app:layout_constraintTop_toBottomOf="@+id/piSellerEmailText" />
+
+    <TextView
+        android:id="@+id/piPurchasePriceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Purchase Price"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/piSellerPurchaseImg"
+        app:layout_constraintTop_toBottomOf="@+id/piSellerPhoneText" />
+
+    <TextView
+        android:id="@+id/piPurchaseStatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Purchase Status"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/piSellerPurchaseImg"
+        app:layout_constraintTop_toBottomOf="@+id/piPurchasePriceText" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

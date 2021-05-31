@@ -2,13 +2,28 @@ package com.example.donpepe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.donpepe.adapters.CartItemAdapter;
 import com.example.donpepe.adapters.ProductItemAdapter;
+import com.example.donpepe.controllers.ProductsController;
+import com.example.donpepe.controllers.PurchasesController;
+import com.example.donpepe.controllers.UsersController;
 import com.example.donpepe.models.Product;
 import com.example.donpepe.models.Seller;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,66 +33,83 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class CartActivity extends AppCompatActivity {
 
-    ArrayList<String> strArreglo;
-    ArrayList<Product> arreglo;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser;
+    String token;
+    ArrayList<Product> products =  new ArrayList<>();
     boolean loggedIn = false;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initProducts();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
-        this.strArreglo = new ArrayList<String>();
-        this.arreglo = new ArrayList<Product>();
-        initProducts();
-        CartItemAdapter adapter = new CartItemAdapter(this, arreglo);
-        ListView cartList = (ListView) findViewById(R.id.cartList);
-        cartList.setAdapter(adapter);
+        currentUser = mAuth.getCurrentUser();
+        SharedPreferences sp = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        token = sp.getString("token","");
 
+        Button buyButton = (Button) findViewById(R.id.cartBuyButton);
+        buyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<ResponseBody> buyCall = PurchasesController.create(token);
+                buyCall.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Intent intent = new Intent(getApplicationContext(), PurchasesActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
     }
 
     private void initProducts(){
-        JSONObject json = null;
-        try {
-            json = new JSONObject(loadJSONFromAsset());
-            JSONArray productsJsonArray = json.getJSONArray("products");
+        products = new ArrayList<>();
+        Call<ResponseBody> cartCall = UsersController.cart(token);
+        cartCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Gson gson = new Gson();
+                try {
+                    String auxBody = response.body().string();
+                    JsonParser parser = new JsonParser();
+                    JsonElement jsonObj = parser.parse(auxBody);
+                    JsonElement jsonItems = jsonObj.getAsJsonObject().get("items");
+                    for(JsonElement jsonElement: (JsonArray) jsonItems){
+                        products.add(gson.fromJson(jsonElement.getAsJsonObject().get("product"), Product.class));
+                    }
+                    CartItemAdapter adapter = new CartItemAdapter(getApplicationContext(), products, token);
+                    ListView cartList = (ListView) findViewById(R.id.cartList);
+                    cartList.setAdapter(adapter);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-            for(int i = 0; i<productsJsonArray.length(); i++)
-            {
-                JSONObject jsonObject = productsJsonArray.getJSONObject(i);
-                JSONObject jsonObjectSeller = jsonObject.getJSONObject("seller");
-                Seller seller = new Seller(
-                        jsonObjectSeller.getString("name"),
-                        jsonObjectSeller.getString("address")
-                );
-                Product product = new Product(
-                        jsonObject.getString("name"),
-                        jsonObject.getString("description"),
-                        jsonObject.getLong("price"),
-                        jsonObject.getString("image"),
-                        seller,
-                        jsonObject.getString("category")
-                );
-                strArreglo.add(product.name);
-                arreglo.add(product);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
-    public String loadJSONFromAsset() {  String json = null;
-        try {
-            InputStream is = this.getAssets().open("products.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();  return null;
-        }
-        return json;
-    }
 }

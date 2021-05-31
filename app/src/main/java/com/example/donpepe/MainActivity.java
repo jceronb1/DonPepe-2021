@@ -1,21 +1,32 @@
 package com.example.donpepe;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.donpepe.adapters.ProductItemAdapter;
+import com.example.donpepe.controllers.ProductsController;
 import com.example.donpepe.models.Product;
 import com.example.donpepe.models.Seller;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.internal.LinkedTreeMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,13 +35,22 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser;
-    ArrayList<String> strArreglo;
-    ArrayList<Product> arreglo;
+    private String token;
+    private int page = 1;
+    private HashMap<Integer, Integer> pageItems = new HashMap<>();
+    ArrayList<Product> products = new ArrayList<>();
+    private Menu theMenu;
 
     @Override
     protected void onStart() {
@@ -40,111 +60,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUi(){
-        ImageButton burger = (ImageButton) findViewById(R.id.burger);
-        ImageButton cart = (ImageButton) findViewById(R.id.cartButton);
-        Button singin = (Button) findViewById(R.id.signInMainButton);
-        ImageButton signout = (ImageButton) findViewById(R.id.signOut);
+
         if(currentUser != null){
-            singin.setVisibility(View.INVISIBLE);
-            burger.setVisibility(View.VISIBLE);
-            signout.setVisibility(View.VISIBLE);
-            burger.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), SellSelectActivity.class);
-                    intent.putExtra("loggedIn", "true");
-                    startActivity(intent);
-                }
-            });
-            cart.setVisibility(View.VISIBLE);
-            cart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), CartActivity.class);
-                    intent.putExtra("loggedIn", "true");
-                    startActivity(intent);
-                }
-            });
-            signout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAuth.signOut();
-                    currentUser = null;
-                    updateUi();
-                }
-            });
-        }else{
-            burger.setVisibility(View.INVISIBLE);
-            cart.setVisibility(View.INVISIBLE);
-            singin.setVisibility(View.VISIBLE);
-            signout.setVisibility(View.INVISIBLE);
-            singin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intent);
-                }
-            });
+            SharedPreferences sp = getSharedPreferences("myPrefs", MODE_PRIVATE);
+            token = sp.getString("token", null);
+            System.out.println("WE FOUND A TOKEN CAP");
+            System.out.println(token);
         }
+        setupMenuItems();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.strArreglo = new ArrayList<String>();
-        this.arreglo = new ArrayList<Product>();
         initProducts();
-        ProductItemAdapter adapter = new ProductItemAdapter(this, arreglo);
-        ListView homeList = (ListView) findViewById(R.id.homeList);
-        homeList.setAdapter(adapter);
 
         ImageButton homeButton = (ImageButton) findViewById(R.id.homeButton);
         ImageButton techButton = (ImageButton) findViewById(R.id.techCategory);
         ImageButton petsButton = (ImageButton) findViewById(R.id.petsCategory);
         ImageButton vehiclesButton = (ImageButton) findViewById(R.id.vehiclesCategory);
 
-        homeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                JSONObject json = null;
-                try {
-                    json = new JSONObject(loadJSONFromAsset());
-                    JSONArray  productsJsonArray = json.getJSONArray("products");
-                    JSONObject jsonObject = productsJsonArray.getJSONObject(position);
-                    JSONObject jsonObjectSeller = jsonObject.getJSONObject("seller");
-                    Seller seller = new Seller(
-                            jsonObjectSeller.getString("name"),
-                            jsonObjectSeller.getString("address")
-                    );
-
-                    Intent intent = new Intent(view.getContext(), ProductActivity.class);
-                    intent.putExtra("name", jsonObject.getString("name"));
-                    intent.putExtra("price", jsonObject.getLong("price"));
-                    intent.putExtra("description", jsonObject.getString("description"));
-                    intent.putExtra("image", jsonObject.getString("image"));
-                    intent.putExtra("category", jsonObject.getString("category"));
-                    intent.putExtra("seller_name", seller.name);
-                    intent.putExtra("seller_address", seller.address);
-                    if(currentUser != null){
-                        intent.putExtra("loggedIn", "true");
-                    }
-                    startActivity(intent);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
                 intent.putExtra("category", "home");
-                if(currentUser != null){
-                    intent.putExtra("loggedIn", "true");
-                }
                 startActivity(intent);
             }
         });
@@ -186,48 +127,137 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initProducts(){
-        JSONObject json = null;
-        try {
-            json = new JSONObject(loadJSONFromAsset());
-            JSONArray productsJsonArray = json.getJSONArray("products");
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        super.onCreateOptionsMenu(menu);
+        theMenu = menu;
+        setupMenuItems();
+        return true;
+    }
 
-            for(int i = 0; i<productsJsonArray.length(); i++)
-            {
-                JSONObject jsonObject = productsJsonArray.getJSONObject(i);
-                JSONObject jsonObjectSeller = jsonObject.getJSONObject("seller");
-                Seller seller = new Seller(
-                        jsonObjectSeller.getString("name"),
-                        jsonObjectSeller.getString("address")
-                );
-                Product product = new Product(
-                        jsonObject.getString("name"),
-                        jsonObject.getString("description"),
-                        jsonObject.getLong("price"),
-                        jsonObject.getString("image"),
-                        seller,
-                        jsonObject.getString("category")
-                );
-                strArreglo.add(product.name);
-                arreglo.add(product);
+    void setupMenuItems(){
+        if(theMenu != null){
+            MenuItem itemCart = theMenu.getItem(0);
+            MenuItem itemSales = theMenu.getItem(1);
+            MenuItem itemPurchases = theMenu.getItem(2);
+            MenuItem itemSell = theMenu.getItem(3);
+            MenuItem itemSignout = theMenu.getItem(4);
+            MenuItem itemSignin = theMenu.getItem(5);
+
+
+            if(currentUser != null){
+                itemSignout.setVisible(true);
+                itemSell.setVisible(true);
+                itemPurchases.setVisible(true);
+                itemSales.setVisible(true);
+                itemCart.setVisible(true);
+                itemSignin.setVisible(false);
+            }else{
+                itemSignout.setVisible(false);
+                itemSell.setVisible(false);
+                itemPurchases.setVisible(false);
+                itemSales.setVisible(false);
+                itemCart.setVisible(false);
+                itemSignin.setVisible(true);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 
-    public String loadJSONFromAsset() {  String json = null;
-        try {
-            InputStream is = this.getAssets().open("products.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();  return null;
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemClicked = item.getItemId();
+        if(itemClicked == R.id.itemSignOut){
+            mAuth.signOut();
+            currentUser = null;
+            updateUi();
+        }else if(itemClicked == R.id.itemSell){
+            Intent intent = new Intent(getApplicationContext(), SellSelectActivity.class);
+            startActivity(intent);
+        }else if(itemClicked == R.id.itemPurchases){
+            Intent intent = new Intent(getApplicationContext(), PurchasesActivity.class);
+            startActivity(intent);
+        }else if(itemClicked == R.id.itemSales){
+            Intent intent = new Intent(getApplicationContext(), SalesActivity.class);
+            startActivity(intent);
+        }else if(itemClicked == R.id.itemCart){
+            Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+            startActivity(intent);
+        }else if(itemClicked == R.id.itemSignIn){
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
         }
-        return json;
+        return true;
+    };
+
+    private void initProducts(){
+        nextProductsPage();
+    }
+
+
+    private void nextProductsPage(){
+        Call<ResponseBody> indexCall = null;
+        if(currentUser != null){
+            indexCall = ProductsController.index(page, token);
+        }else{
+            indexCall = ProductsController.index(page);
+        }
+        indexCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                page += 1;
+                Gson gson = new Gson();
+                try {
+                    String auxBody = response.body().string();
+                    JsonParser parser = new JsonParser();
+                    JsonElement jsonArr = parser.parse(auxBody);
+                    for(JsonElement jsonElement : (JsonArray)jsonArr){
+                        products.add( gson.fromJson(jsonElement, Product.class) );
+                    }
+                    ProductItemAdapter adapter = new ProductItemAdapter(getApplicationContext(), products);
+                    ListView homeList = (ListView) findViewById(R.id.homeList);
+                    homeList.setAdapter(adapter);
+                    int totalItems = pageItems.values().stream().mapToInt(element -> element).sum();
+                    System.out.println("MOVING TO " + (totalItems-1));
+                    homeList.setSelection(totalItems-1);
+                    pageItems.put(page,((JsonArray) jsonArr).size());
+                    homeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Intent intent = new Intent(view.getContext(), ProductActivity.class);
+                                intent.putExtra("productId", products.get(position).getId());
+                                startActivity(intent);
+                        }
+                    });
+
+                    AbsListView.OnScrollListener listener = new AbsListView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                        }
+
+                        @Override
+                        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                            int lastItem = firstVisibleItem + visibleItemCount;
+                            if(lastItem == totalItemCount && pageItems.get(page) != 0){
+                                homeList.setOnScrollListener(null);
+                                System.out.println("CALLING NEXT PRODUCTS PAGE " + page );
+                                nextProductsPage();
+                            }
+                        }
+                    };
+                    homeList.setOnScrollListener(listener);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

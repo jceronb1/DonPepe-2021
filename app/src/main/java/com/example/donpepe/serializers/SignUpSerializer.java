@@ -1,6 +1,9 @@
-package com.example.donpepe.models;
+package com.example.donpepe.serializers;
 
-public class Seller {
+import com.example.donpepe.models.Seller;
+import com.google.gson.Gson;
+
+public class SignUpSerializer {
 
     private String uid;
     private String email;
@@ -12,37 +15,25 @@ public class Seller {
     private double lon;
     private String imageUrl;
 
-    private String name;
-    private String image;
-
-    public Seller(String uid, String name, String email, String password, String address, String image){
-
+    public SignUpSerializer() {
     }
 
-    public Seller(String uid, String name, String email, String password, String passwordConfirmation, String address, String image){
-
+    public SignUpSerializer(Seller seller) {
+        this.uid = seller.getUid();
+        this.email = seller.getEmail();
+        this.password = seller.getPassword();
+        this.passwordConfirmation = seller.getPasswordConfirmation();
+        this.phoneNumber = seller.getPhoneNumber();
+        this.address = seller.getAddress();
+        this.lat = seller.getLat();
+        this.lon = seller.getLon();
+        this.imageUrl = seller.getImageUrl();
     }
 
-    public Seller(String uid, String name, String address){
-        this.name = name;
-        this.email = "";
-        this.password = "";
-        this.address = address;
-        this.image = "";
-    }
-
-    // methodsToUse
-
-    public Seller(String uid, String email, String password, String passwordConfirmation, String phoneNumber, String address, double lat, double lon, String imageUrl){
-        this.uid = uid;
-        this.email = email;
-        this.password = password;
-        this.passwordConfirmation = passwordConfirmation;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.lat = lat;
-        this.lon = lon;
-        this.imageUrl = imageUrl;
+    public static final String asJson(Seller seller){
+        SignUpSerializer aux = new SignUpSerializer(seller);
+        Gson gson = new Gson();
+        return gson.toJson(aux);
     }
 
     public String getUid() {
@@ -115,21 +106,5 @@ public class Seller {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 }

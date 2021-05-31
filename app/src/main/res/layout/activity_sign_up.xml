@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:textAlignment="textEnd"
     tools:context=".SignUpActivity">
 
     <ImageView
@@ -18,11 +19,12 @@
     <TextView
         android:id="@+id/emailLabel"
         android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_height="35dp"
         android:layout_marginStart="25dp"
         android:layout_marginTop="15dp"
         android:text="email"
-        android:textSize="25sp"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/emailText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signUpFilesButton" />
@@ -30,11 +32,13 @@
     <EditText
         android:id="@+id/emailText"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="35dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:text="jorgeggayon@gmail.com"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/emailLabel"
         app:layout_constraintTop_toBottomOf="@+id/signUpCamButton" />
@@ -42,11 +46,13 @@
     <EditText
         android:id="@+id/passwordText"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="35dp"
         android:layout_marginStart="10dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:password="true"
+        android:text="password"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/passwordLabel"
         app:layout_constraintTop_toBottomOf="@+id/emailText" />
@@ -54,43 +60,76 @@
     <TextView
         android:id="@+id/passwordLabel"
         android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_height="35dp"
         android:layout_marginStart="25dp"
         android:text="password"
-        android:textSize="25sp"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/passwordText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailLabel" />
 
     <EditText
-        android:id="@+id/phoneText"
+        android:id="@+id/passwordConfirmationText"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="35dp"
         android:layout_marginStart="10dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:password="true"
+        android:text="password"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/passwordLabel"
+        app:layout_constraintTop_toBottomOf="@+id/passwordText" />
+
+
+    <TextView
+        android:id="@+id/passwordConfirmationLabel"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="25dp"
+        android:text="password confirmation"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/passwordText"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordLabel" />
+
+    <EditText
+        android:id="@+id/phoneText"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginStart="10dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="1"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/phoneLabel"
-        app:layout_constraintTop_toBottomOf="@+id/passwordText" />
+        app:layout_constraintTop_toTopOf="@+id/phoneLabel" />
 
     <TextView
         android:id="@+id/phoneLabel"
         android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_height="35dp"
         android:layout_marginStart="25dp"
         android:text="phone"
-        android:textSize="25sp"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/phoneText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordConfirmationLabel" />
 
     <TextView
         android:id="@+id/addrLabel"
         android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:text="address"
-        android:textSize="25sp"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/searchAddrButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phoneLabel" />

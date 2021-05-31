@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:title="MY CART"
+        android:id="@+id/itemCart"/>
+
+
+    <item android:title="MY SALES"
+        android:id="@+id/itemSales"/>
+
+    <item android:title="MY PURCHASES"
+        android:id="@+id/itemPurchases"/>
+
+    <item android:title="SELL"
+        android:id="@+id/itemSell"/>
+
+    <item android:title="LOG OUT"
+        android:id="@+id/itemSignOut"/>
+
+    <item android:title="SIGN IN"
+        android:id="@+id/itemSignIn"/>
+
+
+</menu>

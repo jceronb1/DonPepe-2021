@@ -86,41 +86,9 @@
         android:layout_marginTop="25dp"
         android:text="Don pepe"
         android:textAlignment="center"
-        app:layout_constraintStart_toEndOf="@+id/burger"
+
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:textSize="25sp" />
-
-    <ImageButton
-        android:id="@+id/burger"
-        android:layout_width="65dp"
-        android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_sell_black_18dp" />
-
-    <ImageButton
-        android:id="@+id/cartButton"
-        android:layout_width="65dp"
-        android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/burger"
-        app:srcCompat="@drawable/baseline_shopping_cart_black_18dp" />
-
-    <Button
-        android:id="@+id/signInMainButton"
-        android:layout_width="72dp"
-        android:layout_height="70dp"
-        android:text="Sign in"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/signOut"
-        android:layout_width="65dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="1dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cartButton"
-        app:srcCompat="@android:drawable/btn_dialog" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
