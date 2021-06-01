@@ -1,10 +1,16 @@
 package com.example.donpepe;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +26,8 @@ import com.example.donpepe.controllers.SalesController;
 import com.example.donpepe.models.Purchase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -33,9 +41,12 @@ public class SaleActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance("https://donpepe-4e523-default-rtdb.firebaseio.com/");
+    private DatabaseReference myref;
     private String token;
     private String purchaseId;
     private Purchase purchase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +62,16 @@ public class SaleActivity extends AppCompatActivity {
     }
 
     private void updateUi(){
-        Call<ResponseBody> showCall = PurchasesController.show(purchaseId, token);
+        System.out.println("SALE into update Ui");
+        Call<ResponseBody> showCall = SalesController.show(purchaseId, token);
         Activity me = this;
         showCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Gson gson = new Gson();
                 try {
-                    Purchase purchase = gson.fromJson(response.body().string(), Purchase.class);
+                    String auxBody = response.body().string();
+                    Purchase purchase = gson.fromJson(auxBody, Purchase.class);
                     TextView sellerEmailtext = (TextView) findViewById(R.id.sBuyerEmailText);
                     TextView sellerPhoneText = (TextView) findViewById(R.id.sBuyerPhoneText);
                     TextView purchasePriceText = (TextView) findViewById(R.id.sSalePriceText);
@@ -66,7 +79,8 @@ public class SaleActivity extends AppCompatActivity {
                     ImageView sellerImg = (ImageView) findViewById(R.id.sBuyerPurchaseImg);
                     Button updateStatusButton = (Button) findViewById(R.id.updateStatusButton);
                     Button routeButton = (Button) findViewById(R.id.routeButton);
-
+                    System.out.println("PURCHASE STATUS");
+                    System.out.println(purchase.getStatusCd());
                     if(purchase.getStatusCd() == 0){
                         updateStatusButton.setText("UPDATE TO SHIPMENT IN PROGRESS");
                     }
@@ -78,34 +92,36 @@ public class SaleActivity extends AppCompatActivity {
                         updateStatusButton.setVisibility(View.INVISIBLE);
                         routeButton.setEnabled(false);
                         routeButton.setVisibility(View.INVISIBLE);
-                    }else{
-                        updateStatusButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Call<ResponseBody> updateCall = SalesController.updateStatus(purchase.getId(), token);
-                                updateCall.enqueue(new Callback<ResponseBody>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        updateUi();
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                                    }
-                                });
-                            }
-                        });
-
-                        routeButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(v.getContext(), RouteActivity.class);
-                                intent.putExtra("purchaseId", purchase.getId());
-                                startActivity(intent);
-                            }
-                        });
                     }
+
+                    updateStatusButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Call<ResponseBody> updateCall = SalesController.updateStatus(purchase.getId(), token);
+                            updateCall.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    updateUi();
+                                    System.out.println("SALE CALL ENDED");
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
+                    routeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(v.getContext(), RouteActivity.class);
+                            intent.putExtra("purchaseId", purchase.getId());
+                            intent.putExtra("viewForSeller", true);
+                            startActivity(intent);
+                        }
+                    });
+
 
                     sellerEmailtext.setText(purchase.getBuyer().getEmail());
                     sellerPhoneText.setText(purchase.getBuyer().getPhoneNumber());
@@ -126,4 +142,5 @@ public class SaleActivity extends AppCompatActivity {
             }
         });
     }
+
 }

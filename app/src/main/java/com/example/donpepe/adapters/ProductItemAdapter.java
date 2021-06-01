@@ -57,13 +57,14 @@ public class ProductItemAdapter extends BaseAdapter {
         TextView itemName = (TextView) view.findViewById(R.id.itemName);
         ImageView itemImage = (ImageView) view.findViewById(R.id.itemImage);
         Drawable drawable;
-        if(position < this.products.size()){
-            itemName.setText(this.products.get(position).getName());
-            Glide.with(view).load(this.products.get(position).getImages().get(0)).apply(new RequestOptions().override(200, 250)).into(itemImage);
+        itemName.setText(this.products.get(position).getName());
+        Glide.with(view).load(this.products.get(position).getImages().get(0)).apply(new RequestOptions().override(200, 250)).into(itemImage);
+        /*if(position < this.products.size()){
+
         }else{
             itemName.setText(this.products.get(this.products.size()-1).getName());
             Glide.with(view).load(this.products.get(this.products.size()-1).getImages().get(0)).apply(new RequestOptions().override(200, 250)).into(itemImage);
-        }
+        }*/
         return view;
     }
 }

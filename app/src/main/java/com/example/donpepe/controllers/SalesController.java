@@ -8,7 +8,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 public class SalesController {
-    public static final Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:3000/").build();
+    public static final Retrofit retrofit = new Retrofit.Builder().baseUrl("https://donpepe.herokuapp.com/").build();
     private static final SalesService salesService = retrofit.create(SalesService.class);
 
     public static final Call<ResponseBody> index(String token){

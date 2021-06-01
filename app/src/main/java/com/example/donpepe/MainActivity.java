@@ -1,10 +1,17 @@
 package com.example.donpepe;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,9 +25,16 @@ import android.widget.ListView;
 import com.example.donpepe.adapters.ProductItemAdapter;
 import com.example.donpepe.controllers.ProductsController;
 import com.example.donpepe.models.Product;
+import com.example.donpepe.models.Purchase;
 import com.example.donpepe.models.Seller;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -35,6 +49,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
@@ -50,7 +65,14 @@ public class MainActivity extends AppCompatActivity {
     private int page = 1;
     private HashMap<Integer, Integer> pageItems = new HashMap<>();
     ArrayList<Product> products = new ArrayList<>();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance("https://donpepe-4e523-default-rtdb.firebaseio.com/");
+    private DatabaseReference myref;
+    private NotificationChannel newSaleChanel;
+    private NotificationChannel updatedSaleChannel;
+    public static final String NEW_SALE_CHANNEL_ID = "NEW_SALE";
+    public static final String SALE_UPDATED_CHANNEL_ID = "SALE_UPDATED";
     private Menu theMenu;
+    private ChildEventListener eventListener;
 
     @Override
     protected void onStart() {
@@ -66,9 +88,122 @@ public class MainActivity extends AppCompatActivity {
             token = sp.getString("token", null);
             System.out.println("WE FOUND A TOKEN CAP");
             System.out.println(token);
+            myref = database.getReference(currentUser.getUid()).child("sales");
+            if(eventListener == null){
+                eventListener = new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        if(Integer.parseInt(snapshot.getValue().toString()) == 0) {
+                            String newSale = snapshot.getKey();
+                            notifyNewSale(newSale, snapshot.getKey());
+                        }
+                    }
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        if(Integer.parseInt(snapshot.getValue().toString()) != 0 && Integer.parseInt(snapshot.getValue().toString()) != 1) {
+                            String updatedSale = snapshot.getKey();
+                            notifyUpdatedSale(updatedSale, snapshot.getKey());
+                        }
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                };
+                myref.addChildEventListener(eventListener);
+            }
+
         }
         setupMenuItems();
     }
+
+    private void notifyNewSale(String newSale, String notification){
+        if(currentUser != null){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && newSaleChanel == null) {
+                CharSequence name = "DonPepeNewSale";
+                String description = "Channel For DonPepe";
+                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+                newSaleChanel = new NotificationChannel(NEW_SALE_CHANNEL_ID, name, importance);
+                newSaleChanel.setDescription(description);
+                // Register the channel with the system; you can't change the importance
+                // or other notification behaviors after this
+                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(newSaleChanel);
+            }
+
+
+
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), NEW_SALE_CHANNEL_ID);
+            mBuilder.setContentTitle("You have a new sale");
+            mBuilder.setContentText("Tap here to see details");
+            mBuilder.setSmallIcon(R.drawable.ic_launcher_background);
+            mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            finishActivity(969);
+            Intent intent = new Intent(this, SalesActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
+            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 969, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            mBuilder.setContentIntent(pendingIntent);
+            mBuilder.setAutoCancel(true); //Remueve la notificación cuando se toca
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+            // notificationId es un entero unico definido para cada notificacion que se lanza
+            notificationManager.notify(001, mBuilder.build());
+            DatabaseReference xref = database.getReference(currentUser.getUid() + "/sales").child(notification);
+            xref.removeValue();
+        }
+
+    }
+
+    private void notifyUpdatedSale(String updatedSale, String notification){
+        if(currentUser != null){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && updatedSaleChannel == null) {
+                CharSequence name = "DonPepeUpdatedSale";
+                String description = "Channel For DonPepe";
+                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+                updatedSaleChannel = new NotificationChannel(SALE_UPDATED_CHANNEL_ID, name, importance);
+                updatedSaleChannel.setDescription(description);
+                // Register the channel with the system; you can't change the importance
+                // or other notification behaviors after this
+                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(updatedSaleChannel);
+            }
+
+
+
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), SALE_UPDATED_CHANNEL_ID);
+            mBuilder.setContentTitle("You have a new sale");
+            mBuilder.setContentText("Tap here to see details");
+            mBuilder.setSmallIcon(R.drawable.ic_launcher_background);
+            mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            finishActivity(969);
+            Intent intent = new Intent(this, SalesActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
+            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 969, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            mBuilder.setContentIntent(pendingIntent);
+            mBuilder.setAutoCancel(true); //Remueve la notificación cuando se toca
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+            // notificationId es un entero unico definido para cada notificacion que se lanza
+            notificationManager.notify(001, mBuilder.build());
+        }
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

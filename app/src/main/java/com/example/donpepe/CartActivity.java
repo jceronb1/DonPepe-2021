@@ -1,9 +1,15 @@
 package com.example.donpepe;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
@@ -15,14 +21,18 @@ import com.example.donpepe.adapters.CartItemAdapter;
 import com.example.donpepe.adapters.ProductItemAdapter;
 import com.example.donpepe.controllers.ProductsController;
 import com.example.donpepe.controllers.PurchasesController;
+import com.example.donpepe.controllers.SalesController;
 import com.example.donpepe.controllers.UsersController;
 import com.example.donpepe.models.Product;
 import com.example.donpepe.models.Seller;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
@@ -32,6 +42,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -44,7 +55,8 @@ public class CartActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     String token;
     ArrayList<Product> products =  new ArrayList<>();
-    boolean loggedIn = false;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance("https://donpepe-4e523-default-rtdb.firebaseio.com/");
+    private DatabaseReference ref;
 
     @Override
     protected void onStart() {
@@ -68,6 +80,10 @@ public class CartActivity extends AppCompatActivity {
                 buyCall.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        for(Product x: products){
+                            ref = database.getReference(x.getSeller().getUid() + "/sales").child(x.getId());
+                            ref.setValue(0);
+                        }
                         Intent intent = new Intent(getApplicationContext(), PurchasesActivity.class);
                         startActivity(intent);
                     }

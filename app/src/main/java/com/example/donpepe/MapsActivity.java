@@ -65,8 +65,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         EditText searchAddrText = (EditText) findViewById(R.id.searchAddrText);
                                         addressName = searchAddrText.getText().toString();
                                         intent.putExtra("address", addressName);
-                                        intent.putExtra("lat", marker.getPosition().latitude);
-                                        intent.putExtra("lon", marker.getPosition().longitude);
+                                        intent.putExtra("lat", addressResult.getLatitude());
+                                        intent.putExtra("lon", addressResult.getLongitude());
                                         setResult(RESULT_OK, intent);
                                         finish();
                                     }

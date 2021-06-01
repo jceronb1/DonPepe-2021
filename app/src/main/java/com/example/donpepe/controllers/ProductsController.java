@@ -1,7 +1,11 @@
 package com.example.donpepe.controllers;
 
+import com.example.donpepe.models.Product;
+import com.example.donpepe.serializers.NewProductSerializer;
+import com.example.donpepe.serializers.SignInSerializer;
 import com.example.donpepe.services.ProductsService;
 import com.example.donpepe.services.UsersService;
+import com.google.gson.Gson;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -11,7 +15,7 @@ import retrofit2.Retrofit;
 
 public class ProductsController {
 
-    public static final Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:3000/").build();
+    public static final Retrofit retrofit = new Retrofit.Builder().baseUrl("https://donpepe.herokuapp.com/").build();
     private static final ProductsService productsService = retrofit.create(ProductsService.class);
 
     public static final Call<ResponseBody> index(int page){
@@ -41,7 +45,11 @@ public class ProductsController {
         return productsService.removeFromCart(id, token);
     }
 
-
+    public static final Call<ResponseBody> create(Product newProduct, String category,  String token){
+        String json = NewProductSerializer.asJson(newProduct, category);
+        RequestBody body = RequestBody.create(json ,MediaType.parse("application/json"));
+        return productsService.create(body, token);
+    }
 
 
 

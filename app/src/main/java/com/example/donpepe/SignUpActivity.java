@@ -71,8 +71,8 @@ public class SignUpActivity extends AppCompatActivity {
             System.out.println(data.getDoubleExtra("lon", 99));
             System.out.println(data.getDoubleExtra("lat", 99));
             this.address = data.getStringExtra("address");
-            this.lat = data.getDoubleExtra("lon", 99);
-            this.lon = data.getDoubleExtra("lat", 99);
+            this.lon = data.getDoubleExtra("lon", 99);
+            this.lat = data.getDoubleExtra("lat", 99);
             TextView text = (TextView) findViewById(R.id.addressText);
             text.setText(this.address + " " + this.lat + "," + this.lon);
             Toast.makeText(getApplicationContext(), "Address is set to " + this.address + " " + this.lat + " " + this.lon, Toast.LENGTH_LONG).show();
@@ -224,6 +224,10 @@ public class SignUpActivity extends AppCompatActivity {
                                                 lon,
                                                 imageUrl
                                         );
+                                        System.out.println("SIGN UP LAT");
+                                        System.out.println( newSeller.getLat());
+                                        System.out.println("SIGN UP LON");
+                                        System.out.println( newSeller.getLon());
                                         Call<ResponseBody> signUpCall =  UsersController.signUp(newSeller);
                                         signUpCall.enqueue(new Callback<ResponseBody>() {
                                             @Override

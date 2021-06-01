@@ -21,15 +21,8 @@ public class Product {
         this.description = description;
         this.price = price;
         this.image = image;
-        this.seller = seller;
-        this.category = category;
-    }
-
-    public Product(String name, String description, Number price, ArrayList<String> images, Seller seller, String category){
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.images = images;
+        this.images = new ArrayList<>();
+        this.images.add(this.image);
         this.seller = seller;
         this.category = category;
     }
@@ -74,10 +67,6 @@ public class Product {
         return images;
     }
 
-    public void setImages(ArrayList<String> images) {
-        this.images = images;
-    }
-
     public Seller getSeller() {
         return seller;
     }
@@ -96,9 +85,13 @@ public class Product {
 
     public String getImage() {
         return image;
+
     }
 
     public void setImage(String image) {
+        this.images = new ArrayList<>();
+        this.images.add(image);
         this.image = image;
+
     }
 }

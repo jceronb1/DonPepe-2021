@@ -62,6 +62,7 @@ public class ProductActivity extends AppCompatActivity {
         Button buyButton = (Button) findViewById(R.id.buyButton);
 
         if(currentUser != null){
+
             buyButton.setText("Comprar");
             buyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -111,6 +112,11 @@ public class ProductActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 try {
                     product = gson.fromJson(response.body().string(), Product.class);
+                    System.out.println("ABOUT TO EVALUATE");
+                    if(product.getSeller().getUid().equals(currentUser.getUid())){
+                        System.out.println("MAKE SENSE");
+                        buyButton.setVisibility(View.INVISIBLE);
+                    }
                     productName.setText(product.getName());
                     categoryName.setText(product.getCategory());
                     price.setText(String.valueOf(product.getPrice()));

@@ -23,4 +23,7 @@ public interface UsersService {
     @GET("api/users/cart")
     Call<ResponseBody> cart(@Header("X-DONPEPE-TOKEN") String token);
 
+    @POST("api/users/update_location")
+    Call<ResponseBody> updateLocation(@Body RequestBody body, @Header("X-DONPEPE-TOKEN") String token);
+
 }

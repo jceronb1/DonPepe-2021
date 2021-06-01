@@ -6,4 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".RouteActivity">
 
+    <fragment
+        android:id="@+id/routeMap"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintHorizontal_bias="0.875"
+        app:layout_constraintVertical_bias="0.0"
+        tools:context=".MapsActivity" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

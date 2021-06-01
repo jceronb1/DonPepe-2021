@@ -68,7 +68,7 @@ public class SalesActivity extends AppCompatActivity {
                     for(JsonElement jsonElement : (JsonArray)jsonArr){
                         sales.add( gson.fromJson(jsonElement, Purchase.class) );
                     }
-                    PurchaseItemAdapter adapter = new PurchaseItemAdapter(getApplicationContext(), sales);
+                    PurchaseItemAdapter adapter = new PurchaseItemAdapter(getApplicationContext(), sales, "buyer");
                     ListView purchasesList = (ListView) findViewById(R.id.salesList);
                     purchasesList.setAdapter(adapter);
                     purchasesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -69,7 +69,7 @@ public class PurchasesActivity extends AppCompatActivity {
                     for(JsonElement jsonElement : (JsonArray)jsonArr){
                         purchases.add( gson.fromJson(jsonElement, Purchase.class) );
                     }
-                    PurchaseItemAdapter adapter = new PurchaseItemAdapter(getApplicationContext(), purchases);
+                    PurchaseItemAdapter adapter = new PurchaseItemAdapter(getApplicationContext(), purchases, "seller");
                     ListView purchasesList = (ListView) findViewById(R.id.purchasesList);
                     purchasesList.setAdapter(adapter);
                     purchasesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

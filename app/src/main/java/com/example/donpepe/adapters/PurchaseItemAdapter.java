@@ -13,16 +13,19 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.donpepe.R;
 import com.example.donpepe.models.Product;
 import com.example.donpepe.models.Purchase;
+import com.example.donpepe.models.Seller;
 
 import java.util.ArrayList;
 
 public class PurchaseItemAdapter extends BaseAdapter {
     ArrayList<Purchase> purchases;
     LayoutInflater iflter;
+    String viewFor;
 
-    public PurchaseItemAdapter(Context appContext, ArrayList<Purchase> purchases){
+    public PurchaseItemAdapter(Context appContext, ArrayList<Purchase> purchases, String viewFor){
         this.purchases = purchases;
         this.iflter = (LayoutInflater.from(appContext));
+        this.viewFor = viewFor;
     }
 
     @Override
@@ -58,11 +61,17 @@ public class PurchaseItemAdapter extends BaseAdapter {
         }else{
             purchase = this.purchases.get(this.purchases.size()-1);
         }
-        sellerEmailText.setText(purchase.getSeller().getEmail());
-        sellerPhoneText.setText(purchase.getSeller().getPhoneNumber());
+        Seller u;
+        if(viewFor == "buyer"){
+            u = purchase.getBuyer();
+        }else{
+            u = purchase.getSeller();
+        }
+        sellerEmailText.setText(u.getEmail());
+        sellerPhoneText.setText(u.getPhoneNumber());
         purchasePriceText.setText(String.valueOf(purchase.getTotalPrice()));
         purchaseSattusText.setText(purchase.getStatus());
-        Glide.with(convertView).load(purchase.getSeller().getImageUrl()).apply(new RequestOptions().override(200, 250)).into(sellerImg);
+        Glide.with(convertView).load(u.getImageUrl()).apply(new RequestOptions().override(200, 250)).into(sellerImg);
         return convertView;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.donpepe.services;
 
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -26,6 +27,9 @@ public interface ProductsService {
 
     @GET("api/products")
     Call<ResponseBody> byCategory(@Query("page") int page, @Query("category") String category);
+
+    @POST("api/products")
+    Call<ResponseBody> create(@Body RequestBody body, @Header("X-DONPEPE-TOKEN") String token);
 
     @POST("api/products/{id}/add_to_cart")
     Call<ResponseBody> addToCart(@Path("id") String id, @Header("X-DONPEPE-TOKEN") String token);
