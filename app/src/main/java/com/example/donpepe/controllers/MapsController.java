@@ -14,6 +14,6 @@ public class MapsController {
     public static final Call<ResponseBody> directions(Double originLat, Double originLon, Double desLat, Double desLon){
         String origin = originLat.toString() + "," + originLon.toString();
         String destination = desLat.toString() + "," + desLon.toString();
-        return mapsService.directions(origin , destination, "AIzaSyDQw6WFfL52z-JCHikmyd98lQOZtWJEQgA");
+        return mapsService.directions(origin , destination, "KEY DE MAPAS");
     }
 }
